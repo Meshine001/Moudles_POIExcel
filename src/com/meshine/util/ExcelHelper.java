@@ -1,19 +1,41 @@
 package com.meshine.util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFComment;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.meshine.entity.DutyTable;
+import com.meshine.entity.Student;
 
 public class ExcelHelper {
 
@@ -123,22 +145,33 @@ public class ExcelHelper {
 		return EMPTY;
 	}
     
-    public static void main(String[] args) throws Exception{
-		String excel2003_2007 = STUDENT_INFO_XLS_PATH;
-		String excel2010 = STUDENT_INFO_XLSX_PATH;
-		List<String> list = new ExcelHelper().readNamesFormExcel(excel2003_2007);
-		if(list != null){
-			System.out.println("Excel2003_2007");
-			for(String name : list){
-				System.out.println("name::"+name);
-			}
-		}
-		List<String> list1 = new ExcelHelper().readNamesFormExcel(excel2010);
-		if(list1 != null){
-			System.out.println("Excel2010");
-			for(String name : list1){
-				System.out.println("name::"+name);
-			}
-		}
+	public static void main(String[] args) throws Exception{
+//		String excel2003_2007 = STUDENT_INFO_XLS_PATH;
+//		String excel2010 = STUDENT_INFO_XLSX_PATH;
+//		List<String> list = new ExcelHelper().readNamesFormExcel(excel2003_2007);
+//		if(list != null){
+//			System.out.println("Excel2003_2007");
+//			for(String name : list){
+//				System.out.println("name::"+name);
+//			}
+//		}
+//		List<String> list1 = new ExcelHelper().readNamesFormExcel(excel2010);
+//		if(list1 != null){
+//			System.out.println("Excel2010");
+//			for(String name : list1){
+//				System.out.println("name::"+name);
+//			}
+//		}
+    	
+    	ExportExcel<DutyTable> ex = new ExportExcel<>();
+    	String[] headers = {"日期","值班人员","签到","值班情况"};
+    	List<DutyTable> dataSet = new ArrayList<DutyTable>();
+    	dataSet.add(new DutyTable(new Date(), "张三", "", ""));
+    	dataSet.add(new DutyTable(new Date(), "张si", "", ""));
+    	dataSet.add(new DutyTable(new Date(), "a", "", ""));
+    	dataSet.add(new DutyTable(new Date(), "张s三", "", ""));
+    	OutputStream out = new FileOutputStream("D://A.xls");
+    	ex.exportExcel("研究中心值班表", headers, dataSet, out, "yyyy/MM/dd");
+    	}
 	}
-}
+
